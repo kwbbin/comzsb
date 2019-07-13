@@ -1,0 +1,50 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ApplyDao">
+
+	<update id="updateStudent" parameterType="student">
+		UPDATE student set name=#{name},sex=#{sex},nation=#{nation},policy=#{policy},borthday=#{borthday},zunkaozheng=#{zunkaozheng},collegeid=#{collegeid},professionid=#{professionid},toCollegeid=#{toCollegeid},toprofessionid=#{toprofessionid},award=#{award},merit=#{merit},homeAdress=#{homeAdress},nowAdress=#{nowAdress},jointime=#{jointime},state=#{state},postcode=#{postcode} where id=#{id}
+	</update>
+
+    <select id="getAllProfession" resultType="profession">
+ 		select * from profession
+ 	</select>
+
+	<select id="exitImage" resultType="string">
+ 		select image from student where id=#{id}
+ 	</select>
+
+    <select id="getAllCollege" resultType="college">
+ 		select * from college
+ 	</select>
+
+	<select id="getProOrderByNum" resultType="java.lang.String">
+ 		SELECT proOrder from profession where proNum=#{proNum}
+ 	</select>
+
+	<select id="getIdentityCard" resultType="java.lang.String">
+ 		SELECT identityCard FROM student WHERE id=#{id}
+ 	</select>
+
+	<select id="getStudentByPhone" resultType="student">
+ 		select * from student where phone = #{phone}
+ 	</select>
+
+	<update id="uploadFile" parameterType="student">
+		UPDATE student set image=#{image} where id=#{id}
+	</update>
+
+	<select id="getStudentState" resultType="int">
+ 		select state from student where id = #{id}
+ 	</select>
+
+	<update id="uploadState" parameterType="student">
+		UPDATE student set state=#{state} where id=#{id}
+	</update>
+
+	<select id="getImageById" parameterType="student" resultType="java.lang.String">
+		select image from student where id=#{id}
+	</select>
+
+</mapper>

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>报名</title>
+    <link href="../js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../js/jquery/jquery.js"></script>
+    <script src="../js/layDate-v5.0.9/laydate/laydate.js"></script>
+    <script src="../js/bootstrap/js/bootstrap.min.js"></script>
+
+    <script>
+        window.onload=function (ev) {
+            getData();
+            var url=Anext.href;
+            if(url.indexOf("javascript") == -1){
+                document.getElementById("Anext").onclick="";
+            }
+
+        }
+
+
+
+        function getData() {
+            getData1();
+            var Anext=document.getElementById("Anext");
+            var url=Anext.href;
+            if(url.indexOf("javascript") != -1){
+                Anext.onclick=function (ev) {
+                    alert("请先完成保存");
+                }
+            }else{
+                Anext.onclick="";
+            }
+
+            $.ajax({
+                url :  "getStudent.do",//访问路径
+                type : "post",
+                success :
+                    function(messages){
+                        if(messages!=null&&messages.state>=1&&messages.homeAdress!=null){
+                            getData2();
+                            document.getElementById("Anext").href="apply2.html";
+                            document.getElementById("Anext").onclick="";
+                            $("#mysubmit").bind("click",function(){
+                                alert("你已填写，无法修改");
+                                event.preventDefault();  //阻止默认行为 ( 表单提交 )
+                            });
+                        }else{
+
+                            $("#mysubmit").bind("click",function(){
+                                checkForm();
+                                event.preventDefault();
+                                if($("#eror").text()==""&&$("#professionCode").text()!=""){
+
+                                    var myForm = document.getElementById('myForm');
+                                    document.getElementById("Anext").href="apply2.html";
+                                    myForm.submit();
+                                }else{
+
+                                }
+                            });
+                            // alert("getdate1");
+                            // alert(messages.homeAdress+"  "+messages.state);
+                        }
+
+                    }//查询成功处理函数
+            });
+        }
+
+        /**
+         * 获取表格初始化数据
+         */
+        function getData1() {
+            $.ajax({
+                url :  "getAllProfession.do",//访问路径
+                type : "post",
+                success :
+                    function(messages){
+                        for(var i=0;i<messages.length;i++){
+                            // alert(messages[0].proNum);
+                            var option=$("<option value='"+messages[i].proNum+"'>"+messages[i].proName+"</option>");
+                            $("#professionid").append(option);
+
+                        }
+                        for(var i=0;i<messages.length;i++){
+                            var option=$("<option value='"+messages[i].proNum+"'>"+messages[i].proName+"</option>");
+                            $("#toprofessionid").append(option);
+                        }
+
+                    }//查询成功处理函数
+            });
+
+
+            $.ajax({
+                url :  "getAllCollege.do",//访问路径
+                type : "post",
+                success :
+                    function(messages){
+                        for(var i=0;i<messages.length;i++){
+                            var option=$("<option value='"+messages[i].collegeId+"'>"+messages[i].collegeName+"</option>");
+                            $("#collegeid").append(option);
+
+                        }
+                        for(var i=0;i<messages.length;i++){
+                            var option=$("<option value='"+messages[i].collegeId+"'>"+messages[i].collegeName+"</option>");
+                            $("#toCollegeid").append(option);
+                        }
+
+                    }//查询成功处理函数
+            });
+
+            $.ajax({
+                url :  "getPhone.do",//访问路径
+                type : "post",
+                success :
+                    function(messages){
+                        $("#phone").append(messages);
+
+                    }//查询成功处理函数
+            });
+
+            $("select#toprofessionid").change(function(){
+                var proNum=$(this).val();
+                $.ajax({
+                    url :  "getProOrder.do",//访问路径
+                    type : "post",
+                    data:"proNum="+proNum,
+                    success :
+                        function(messages){
+                            $("#professionCode").text(messages);
+
+                        }//查询成功处理函数
+                });
+            });
+
+            $.ajax({
+                url :  "getIdentityCard.do",//访问路径
+                type : "post",
+                success :
+                    function(messages){
+                        $("#identityCard").text(messages);
+
+                    }//查询成功处理函数
+            });
+        }
+
+        function getData2() {
+            $.ajax({
+                url: "getStudent.do",//访问路径
+                type: "post",
+                success:
+                    function (messages) {
+                        $("#name").attr("value", messages.name);
+                        $("#name").attr("disabled", "true");
+
+                        $("#sex").attr("disabled", "true");
+                        $("#sex ").val(messages.sex);
+
+                        $("#nation ").val(messages.nation);
+                        $("#nation").attr("disabled", "true");
+
+                        $("#policy ").val(messages.policy);
+                        $("#policy").attr("disabled", "true");
+
+                        $("#borthday").attr("value", timestampToTime(messages.borthday));
+                        $("#borthday").attr("disabled", "true");
+
+                        $("#zunkaozheng").attr("value", messages.zunkaozheng);
+                        $("#zunkaozheng").attr("disabled", "true");
+
+                        $("#collegeid ").val(messages.collegeid);
+                        $("#collegeid").attr("disabled", "true");
+
+                        $("#professionid ").val(messages.professionid);
+                        $("#professionid").attr("disabled", "true");
+
+                        $("#toprofessionid ").val(messages.toprofessionid);
+                        $("#toprofessionid").attr("disabled", "true");
+
+                        $("#toCollegeid ").val(messages.toCollegeid);
+                        $("#toCollegeid").attr("disabled", "true");
+
+                        $("#award").val(messages.award);
+                        $("#award").attr("disabled", "true");
+
+                        $("#merit").val(messages.merit);
+                        $("#merit").attr("disabled", "true");
+
+                        $("#homeAdress").attr("value", messages.homeAdress);
+                        $("#homeAdress").attr("disabled", "true");
+
+                        $("#nowAdress").attr("value", messages.nowAdress);
+                        $("#nowAdress").attr("disabled", "true");
+
+                        $("#postcode").attr("value", messages.postcode);
+                        $("#postcode").attr("disabled", "true");
+
+
+
+                    }//查询成功处理函数
+            });
+        }
+
+
+        // 转换时间格式
+        function timestampToTime(timestamp) {
+            var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+            Y = date.getFullYear() + '-';
+            M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+            D = date.getDate() + ' ';
+            h = date.getHours() + ':';
+            m = date.getMinutes() + ':';
+            s = date.getSeconds();
+            return Y+M+D;
+        }
+
+
+        laydate.render({
+            elem: '#borthday',
+            trigger: 'click'
+        });
+    </script>
+    <style>
+            #position p{
+                padding-top: 5px;
+                font-size: 13px;
+            }
+    
+            #position p .span1{
+                font-size: 13px;
+                color: #81D3F8;
+            }
+    
+            #position p .span2{
+                font-size: 13px;
+                color: #AAAAAA;
+            }
+    
+            #position p .span3{
+                font-size: 13px;
+                color: #D9001B;
+            }
+    
+            body{
+        padding-left: 10px;
+    }
+    
+    .myLabel{
+        padding:5px 1%;
+        float: left;
+    }
+    .mySelect{
+        width:200px;
+        display: inline-block;
+    }
+
+    .myInput{
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+    .myGroup{
+        padding: 5px 0;
+        width:100%;
+    }
+
+    table{
+    margin-left: 20px;
+    margin-top: 20px;
+    width:75%;
+    border: 1px solid #999;
+}
+table tr td,table tr th {
+    padding:5px 10px;
+}
+
+table tr:nth-of-type(odd){
+    background:#f3f3f3;
+}
+        </style>
+</head>
+<body>
+    <div id="position"><p> <span class="span1">桌面  </span> <span class="span2">>> </span><span class="span3"> 报名  </span></p></div>
+    <form action="updateStudent.do" id="myForm"  autocomplete="off">
+
+<!--        <table></table>-->
+            
+            
+
+            <table border="1">
+                    <tr>
+                        <td>
+                            <div class="myGroup">
+                                <label for="">姓名：</label><input name="name" id="name" type="text" class="myInput" placeholder="请输入姓名">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="myGroup">
+                                <label for="">性别：</label>
+                                <select name="sex" id="sex" class="form-control mySelect">
+                                    <option style="color:#999;">请选择</option>
+                                    <option value="男">男</option>
+                                    <option value="女">女</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                                <div class="myGroup">
+                                        <label for="">民族：</label>
+                                        <select name="nation" id="nation" class="form-control mySelect">
+                                            <option style="color:#999;">请选择</option>
+                                            <option value="1">汉族</option>
+                                            <option value="2">蒙古族</option>
+                                            <option value="3">回族</option>
+                                            <option value="4">藏族</option>
+                                            <option value="5">维吾尔族</option>
+                                            <option value="6">苗族</option>
+                                            <option value="7">彝族</option>
+                                            <option value="8">壮族</option>
+                                            <option value="9">布依族</option>
+                                            <option value="10">朝鲜族</option>
+                                            <option value="11">满族</option>
+                                            <option value="12">侗族</option>
+                                            <option value="13">瑶族</option>
+                                            <option value="14">白族</option>
+                                            <option value="15">土家族</option>
+                                            <option value="16">哈尼族</option>
+                                            <option value="17">哈萨克族</option>
+                                            <option value="18">傣族</option>
+                                            <option value="19">黎族</option>
+                                            <option value="20">傈僳族</option>
+                                            <option value="21">佤族</option>
+                                            <option value="22">畲族</option>
+                                            <option value="23">高山族</option>
+                                            <option value="24">拉祜族</option>
+                                            <option value="25">水族</option>
+                                            <option value="26">东乡族</option>
+                                            <option value="27">纳西族</option>
+                                            <option value="28">景颇族</option>
+                                            <option value="29">柯尔克孜族</option>
+                                            <option value="30">土族</option>
+                                            <option value="31">达斡尔族</option>
+                                            <option value="32">仫佬族</option>
+                                            <option value="33">羌族</option>
+                                            <option value="34">布朗族</option>
+                                            <option value="35">撒拉族</option>
+                                            <option value="36">毛南族</option>
+                                            <option value="37">仡佬族</option>
+                                            <option value="38">锡伯族</option>
+                                            <option value="39">阿昌族</option>
+                                            <option value="40">普米族</option>
+                                            <option value="41">塔吉克族</option>
+                                            <option value="42">怒族</option>
+                                            <option value="43">乌孜别克族</option>
+                                            <option value="44">俄罗斯族</option>
+                                            <option value="45">鄂温克族</option>
+                                            <option value="46">德昂族</option>
+                                            <option value="47">保安族</option>
+                                            <option value="48">裕固族</option>
+                                            <option value="49">京族</option>
+                                            <option value="50">塔塔尔族</option>
+                                            <option value="51">独龙族</option>
+                                            <option value="52">鄂伦春族</option>
+                                            <option value="53">赫哲族</option>
+                                            <option value="54">门巴族</option>
+                                            <option value="55">珞巴族</option>
+                                            <option value="56">基诺族</option>
+                                        </select>
+                                    </div>
+                        </td>
+                        <td>
+                                <div class="myGroup">
+                                        <label for="">政治面貌：</label>
+                                        <select name="policy" id="policy" class="form-control mySelect">
+                                            <option style="color:#999;">请选择</option>
+                                                <option value="01">中共党员</option>
+                                                <option value="02">共青团员</option>
+                                                <option value="03">民革党员</option>
+                                                <option value="04">民革党员</option>
+                                                <option value="05">民盟盟员</option>
+                                            <option value="06">民建会员</option>
+                                            <option value="07">民进会员</option>
+                                            <option value="08">农工党党员</option>
+                                            <option value="09">致公党党员</option>
+                                            <option value="10">九三学社社员</option>
+                                            <option value="11">台盟盟员</option>
+                                            <option value="12">无党派人士</option>
+                                            <option value="13">群众</option>
+                                        </select>
+                                    </div>
+                        </td>
+                    </tr>
+            
+                    <tr>
+                            <td>
+                                    <div class="myGroup">
+                                        <label for="">出生日期：</label><input name="borthday" id="borthday" type="text" class="myInput" placeholder="请输入出生日期">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="myGroup">
+                                        <label for="">身份证号：</label><label id="identityCard"></label>
+                                    </div>
+                                </td>
+                    </tr>
+
+                    <tr>
+                            <td>
+                                    <div class="myGroup">
+                                        <label for="">高考报名号（长度为14位）：</label><input name="zunkaozheng" id="zunkaozheng" type="text" class="myInput" placeholder="请输入高考报名号">
+                                    </div>
+                                </td>
+                            <td>
+                                    <div class="myGroup">
+                                            <label for="">所在院校：</label>
+                                            <select name="collegeid" id="collegeid" class="form-control mySelect">
+                                                <option style="color:#999;">请选择</option>
+                                                  </select>
+                                        </div>
+                            </td>
+                    </tr>
+
+                    <tr>
+                            <td>
+                                    <div class="myGroup">
+                                            <label for="">毕业专业：</label>
+                                            <select name="professionid" id="professionid" class="form-control mySelect">
+                                                <option style="color:#999;">请选择</option>
+                                                  </select>
+                                        </div>
+                            </td>
+                            <td>
+                                    <div class="myGroup">
+                                            <label for="">报考院校：</label>
+                                            <select name="toCollegeid" id="toCollegeid" class="form-control mySelect">
+                                                <option style="color:#999;">请选择</option>
+                                                  </select>
+                                        </div> 
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>
+                                    <div class="myGroup">
+                                            <label for="">报考专业：</label>
+                                            <select name="toprofessionid" id="toprofessionid" class="form-control mySelect">
+                                                <option style="color:#999;">请选择</option>
+                                                  </select>
+                                        </div>
+                            </td>
+                            <td>
+                                    <label for="">报考专业代码：</label><span id="professionCode"></span>
+                            </td>
+                    </tr>
+                    <tr>
+                            <td>
+                                    <div class="myGroup">
+                                        <label for="">在校所得奖励：</label>
+                                        <textarea id="award" name="award" class="form-control" rows="5"></textarea>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="myGroup">
+                                        <label for="">有何特长：</label>
+                                        <textarea id="merit" name="merit" class="form-control" rows="5"></textarea>
+                                    </div>
+                                </td>
+                    </tr>
+                    <tr>
+                            <td>
+                                    <div class="myGroup">
+                                        <label for="">家庭地址：</label><input name="homeAdress" id="homeAdress" type="text" class="myInput" placeholder="请输入家庭地址">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="myGroup">
+                                        <label for="">联系电话：</label><label id="phone"></label>
+                                    </div>
+                                </td>
+                    </tr>
+                    <tr>
+                            <td>
+                                    <div class="myGroup">
+                                        <label for="">联系地址：</label><input name="nowAdress" id="nowAdress" type="text" class="myInput" placeholder="请输入联系地址">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="myGroup">
+                                        <label for="">邮编：</label><input name="postcode" id="postcode" type="text" class="myInput" placeholder="请输入邮编">
+                                    </div>
+                                </td>
+                    </tr>
+            </table><br>
+            <input type="submit" id="mysubmit" class="btn btn-default" value="保存">&nbsp;<a id="Anext" href="javascript:void(0);" onclick="checkForm()" class="btn btn-default">下一步</a><label style="color:red;" id="eror"></label>
+        <script>
+
+
+
+            function checkForm() {
+                var toprofessionid=document.getElementById("toprofessionid");
+                var professionid=document.getElementById("professionid");
+                var toCollegeid=document.getElementById("toCollegeid");
+                var collegeid=document.getElementById("collegeid");
+                var policy=document.getElementById("policy");
+                var nation=document.getElementById("nation");
+                var sex=document.getElementById("sex");
+                var name=document.getElementById("name");
+                var zunkaozheng=document.getElementById("zunkaozheng");
+                var award=document.getElementById("award");
+                var merit=document.getElementById("merit");
+                var homeAdress=document.getElementById("homeAdress");
+                var nowAdress=document.getElementById("nowAdress");
+                var postcode=document.getElementById("postcode");
+                var borthday=document.getElementById("borthday");
+
+                var joinBegin;
+                var joinEnd;
+                var now=new Date().getTime();
+                $.ajax({
+                    url :  "getBaseinformation.do",//访问路径
+                    type : "post",
+                    async:false,
+                    success :
+                        function(messages){
+                            if(messages!=""){
+                                joinBegin=messages.joinBegin;
+                                joinEnd=messages.joinEnd;
+                            }
+                        }//查询成功处理函数
+                });
+
+                if(now>joinBegin&&now<joinEnd){
+                    if(toprofessionid.options[0].selected == true){
+                        $("#eror").text("请选择报考专业！");
+                    }else if(professionid.options[0].selected == true){
+                        $("#eror").text("请选择毕业专业！");
+                    }else if(toCollegeid.options[0].selected == true){
+                        $("#eror").text("请选择报考院校！");
+                    }else if(collegeid.options[0].selected == true){
+                        $("#eror").text("请选择所在学院！");
+                    }else if(policy.options[0].selected == true){
+                        $("#eror").text("请选择政治面貌！");
+                    }else if(nation.options[0].selected == true){
+                        $("#eror").text("请选择民族！");
+                    }else if(sex.options[0].selected == true){
+                        $("#eror").text("请选择性别！");
+                    }else if(name.value==""){
+                        $("#eror").text("请填写姓名！");
+                    }else if(zunkaozheng.value==""){
+                        $("#eror").text("请填写高考报名号！");
+                    }else if(award.value==""){
+                        $("#eror").text("请填写“在校所得奖励”！");
+                    }else if(merit.value==""){
+                        $("#eror").text("请填写“特长”！");
+                    }else if(homeAdress.value==""){
+                        $("#eror").text("请填写“家庭住址”！");
+                    }else if(nowAdress.value==""){
+                        $("#eror").text("请填写“联系地址”！");
+                    }else if(borthday.value==""){
+                        $("#eror").text("请填写出生日期！");
+                    }else if(postcode.value==""){
+                        $("#eror").text("请填写邮编！");
+                    }else{
+                        $("#eror").text("");
+                    }
+                }else{
+                    $("#eror").text("当前不是报名时间！");
+                    alert("当前不是报名时间");
+                }
+
+
+
+            }
+        </script>
+    </form>
+</body>
+</html>

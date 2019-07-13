@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../js/jquery/jquery.js"></script>
+    <title>桌面</title>
+    <style>
+        body{
+            background: #FFFFFF;
+            text-align: center;
+        }
+
+        #img .img{
+            width:86px;
+            height:110px;
+            border-radius: 43px;
+        }
+
+        #name p{
+            font-size: 22px;
+        }
+        #line{
+            padding-top: 10px;
+        }
+        #line p{
+            font-size:28px;
+        }
+        #line .line_line{
+            height:10px;
+            width:500px;
+            background: #e4e4e4;
+            position: relative;
+            margin:0 auto;
+
+        }
+        #line .line_line .dot{
+           position: absolute;
+           top:-5px;
+            display: inline-block;
+            width:20px;
+            height:20px;
+            border-radius: 10px;
+            background: #3276b1;
+        }
+        #line .line_line .dot:nth-child(1){
+           left:-2px;
+        }
+
+        #line .line_line .dot:nth-child(2){
+           left:100px;
+            background: #e4e4e4;
+        }
+
+        #line .line_line .dot:nth-child(3){
+           left:200px;
+            background: #e4e4e4;
+        }
+
+        #line .line_line .dot:nth-child(4){
+           left:300px;
+           background: #e4e4e4;
+        }
+
+        #line .line_line .dot:nth-child(5){
+           left:400px;
+           background: #e4e4e4;
+
+        }
+
+        #line .line_line .dot:nth-child(6){
+           background: #e4e4e4;
+           left:498px;
+        }
+
+        #line .line_line .text{
+            position: absolute;
+            top:-30px;
+            color: #3276b1;
+            /* display: inline-block; */
+            /* border:1px solid red; */
+        }
+        #line .line_line .text1{
+            left:10px;
+        }
+        #line .line_line .text2{
+            color: #999;
+            left:110px;
+        }
+        #line .line_line .text3{
+            color: #999;
+            left:210px;
+        }
+        #line .line_line .text4{
+           color: #999;
+            left:310px;
+        }
+        #line .line_line .text5{
+           color: #999;
+            left:410px;
+        }
+        #line .line_line .text6{
+           color: #999;
+            width:70px;
+            left:510px;
+        }
+        #line .line_line .action_line{
+            height: 10px;
+            background: #3276b1;
+            /* border: 1px solid red; */
+            width:0px;
+            z-index: 44;
+
+        }
+
+    </style>
+    <script>
+        window.onload=function () {
+            $.ajax({
+                url :  "student/getStudentImage.do",//访问路径
+                type : "post",
+                async:false,
+                success :
+                    function(messages){
+                        $("#image")[0].src=messages;
+                    }//查询成功处理函数
+            })
+            $.ajax({
+                url :  "getStudentName.do",//访问路径
+                type : "post",
+                async:false,
+                success :
+                    function(messages){
+                        $("#name_name").text(messages);
+                    }//查询成功处理函数
+            })
+            $.ajax({
+                url :  "getStudentState.do",//访问路径
+                type : "post",
+                async:false,
+                success :
+                    function(messages){
+
+                        if(messages!=""){
+                            state=messages;
+                            if(state<1||state==""){
+                                $("#line .line_line .action_line").css("width","0px");
+                                $("#line .line_line .dot:nth-child(2)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(3)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(4)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(5)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(6)").css("background","#e4e4e4");
+                                $("#line .line_line .text2").css("color","#999");
+                                $("#line .line_line .text3").css("color","#999");
+                                $("#line .line_line .text4").css("color","#999");
+                                $("#line .line_line .text5").css("color","#999");
+                                $("#line .line_line .text6").css("color","#999");
+                            }
+                            if(state>=1&&state<3){
+                                $("#line .line_line .action_line").css("width","110px");
+                                $("#line .line_line .dot:nth-child(2)").css("background","#3276b1");
+                                $("#line .line_line .dot:nth-child(3)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(4)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(5)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(6)").css("background","#e4e4e4");
+                                $("#line .line_line .text3").css("color","#999");
+                                $("#line .line_line .text4").css("color","#999");
+                                $("#line .line_line .text5").css("color","#999");
+                                $("#line .line_line .text6").css("color","#999");
+                            }
+
+                            if(state==3){
+                                $("#line .line_line .action_line").css("width","210px");
+                                $("#line .line_line .dot:nth-child(2)").css("background","#3276b1");
+                                $("#line .line_line .dot:nth-child(3)").css("background","#3276b1");
+                                $("#line .line_line .dot:nth-child(4)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(5)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(6)").css("background","#e4e4e4");
+                                $("#line .line_line .text4").css("color","#999");
+                                $("#line .line_line .text5").css("color","#999");
+                                $("#line .line_line .text6").css("color","#999");
+                            }
+
+                            if(state==4){
+                                $("#line .line_line .action_line").css("width","310px");
+                                $("#line .line_line .dot:nth-child(5)").css("background","#e4e4e4");
+                                $("#line .line_line .dot:nth-child(6)").css("background","#e4e4e4");
+                                $("#line .line_line .text5").css("color","#999");
+                                $("#line .line_line .text6").css("color","#999");
+                            }
+                            if(state==4){
+                                $("#line .line_line .action_line").css("width","410px");
+                                $("#line .line_line .dot:nth-child(6)").css("background","#e4e4e4");
+                                $("#line .line_line .text6").css("color","#999");
+                            }
+                            if(state==5){
+                                $("#line .line_line .action_line").css("width","510px");
+                            }
+                        }
+                    }//查询成功处理函数
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="title">
+        <h2>湖北理工专升本系统</h2>
+    </div>
+    <div id="img"><img id="image" class="img" src="img/testuser.jpg" alt=""></div>
+    <div id="name"><p>欢迎您，<span id="name_name">kwbbin</span> </p></div>
+    <div id="line">
+        <p>报名流程总览</p>
+        <div>
+            <div class="line_line">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <div class="text text1">注册</div>
+                <div class="text text2">报名</div>
+                <div class="text text3">审核</div>
+                <div class="text text4">下载准考证</div>
+                <div class="text text5">成绩查询</div>
+                <div class="text text6">录取查询</div>
+                <div class="action_line"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

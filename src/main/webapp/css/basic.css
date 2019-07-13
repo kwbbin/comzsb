@@ -1,0 +1,80 @@
+body{
+    padding-left: 10px;
+}
+
+table{
+    border:1px solid #666;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+table tr td,table tr th {
+    padding:5px 10px;
+}
+
+table tr:nth-of-type(odd){
+    background:#f3f3f3;
+}
+
+
+/* 表单弹出框 */
+.box_for_form{
+    width:400px;
+    height:350px;
+    z-index: 999;
+    position: absolute;
+    top:70px;
+    left:350px;
+    border-radius: 10px;
+    background: #9999;
+    box-shadow: 3px 3px 3px 3px #999;
+    /* background: #f3f3f3; */
+    display: none;
+}
+
+#box_profession_add,#box_profession_update{
+    height: 458px;
+    top: 10px;
+}
+
+
+#profession_profession_update{
+    margin: 30px 0 0 150px;
+}
+#profession_profession_add{
+    position: relative;
+    height: 35px;
+    bottom:-20px;
+    left: 150px;
+}
+
+.box_for_form  .box_form_head {
+    height:35px;
+    background:#f3f3f3;
+    border-radius: 10px 10px 0px 0px;
+    position: relative;
+}
+
+.box_for_form  .box_form_content{
+    height: 315px;
+    height: 400px;
+    opacity: 1;
+}
+.box_for_form  .box_form_head img:hover{
+    transform:rotate(90deg);
+    -ms-transform:rotate(90deg); 	/* IE 9 */
+    -moz-transform:rotate(90deg); 	/* Firefox */
+    -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+    -o-transform:rotate(90deg); 	/* Opera */
+    transition: all 0.5s;
+}
+
+.box_for_form .box_form_head img{
+    position: absolute;
+    right:20px;
+    top:10px;
+    cursor: pointer;
+}
+
+
+
+

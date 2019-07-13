@@ -1,0 +1,47 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.MyFunctionDao">
+
+    <select id="myFunction" resultType="myFunction">
+ 		select distinct f.fid,af.tname,f.fName,f.fUrl from myFunction f,function_admin fa,admininformation af
+where fa.adminid=af.id and fa.fid=f.fid and af.id=#{id}
+ 	</select>
+
+
+<select id="getSubjectNum" resultType="int">
+	select count(*) from subjectbasic
+</select>
+
+
+	<select id="getProfessionNum" resultType="int">
+		select count(*) from profession
+	</select>
+
+
+	<select id="getStudentRegisterNum" resultType="int">
+		select count(*) from student
+	</select>
+
+
+	<select id="getStudentJoinNum" resultType="int">
+		select count(*) from student where state>1
+	</select>
+
+
+	<select id="getCheckNum0" resultType="int">
+		select count(*) from student where checked=0
+	</select>
+
+
+	<select id="getCheckNum3" resultType="int">
+		select count(*) from student where checked=2
+	</select>
+
+
+	<select id="getStudentSuccessNum" resultType="int">
+		select count(*) from student where isnojoin=2
+	</select>
+
+
+</mapper>

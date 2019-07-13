@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册管理</title>
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery/jquery.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        #position p{
+            padding-top: 5px;
+            font-size: 13px;
+        }
+
+        #position p .span1{
+            font-size: 13px;
+            color: #81D3F8;
+        }
+
+        #position p .span2{
+            font-size: 13px;
+            color: #AAAAAA;
+        }
+
+        #position p .span3{
+            font-size: 13px;
+            color: #D9001B;
+        }
+
+        body{
+    padding-left: 10px;
+}
+
+table{
+    margin-left: 20px;
+    margin-top: 20px;
+}
+table tr td,table tr th {
+    padding:5px 10px;
+}
+
+table tr:nth-of-type(odd){
+    background:#f3f3f3;
+}
+
+
+    </style>
+    <script>
+        window.onload=function (ev) {
+            getAllStudent();
+        }
+
+        function  getAllStudent(){
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getAllStudent.do",//url
+                success: function (messages) {
+                    for(var i=0;i<messages.length;i++){
+                        var toprofession;
+                        var college;
+                        var profession;
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].toprofessionid,
+                            success: function (messages) {
+                               toprofession=messages.proName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getCollegeById.do",//url
+                            async:false,
+                            data:"id="+messages[i].collegeid,
+                            success: function (messages) {
+                                college=messages.collegeName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].professionid,
+                            success: function (messages) {
+                                profession=messages.proName;
+                            }
+                        });
+                        var tr=$("<tr><td>"+messages[i].id+"</td><td>"+messages[i].wbh+"</td><td>"+messages[i].name+"</td><td>"+messages[i].phone+"</td><td>"+toprofession+"</td><td>"+college+"</td><td>"+profession+"</td><td>"+messages[i].phone+"</td><td>"+messages[i].checked+"</td><td><a onclick='deleteStudent(this)' href='javascript:void(0);' id='"+messages[i].id+"'>删除</a></td></tr>");
+                        $("#studentTable").append(tr);
+                    }
+                }
+            });
+        }
+
+        function deleteStudent(obj){
+            $.ajax({
+                url: "deleteStudent.do",//访问路径
+                type: "post",
+                data: "id=" + obj.getAttribute("id"),
+                success:
+                    function (messages) {
+                        if (messages == "true") {
+                            $(obj).parent().parent().remove();
+                        }else{
+                            alert("无法删除，该数据已被占用");
+                        }
+                    }//查询成功处理函数
+            });
+        }
+
+
+
+        Date.prototype.Format = function(fmt)
+        {
+            var o = {
+                "M+" : this.getMonth()+1,                 //月份
+                "d+" : this.getDate(),                    //日
+                "h+" : this.getHours(),                   //小时
+                "m+" : this.getMinutes(),                 //分
+                "s+" : this.getSeconds(),                 //秒
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度
+                "S"  : this.getMilliseconds()             //毫秒
+            };
+            if(/(y+)/.test(fmt))
+                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+            for(var k in o)
+                if(new RegExp("("+ k +")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            return fmt;
+        };
+
+    </script>
+</head>
+<body>
+    <div id="position"><p> <span class="span1">桌面  </span> <span class="span2">>> </span><span class="span3"> 报名信息管理  </span></p></div>
+    <div>
+            <form action="" id="form6">
+                    <table border="1" id="studentTable">
+                            <tr>
+                                <td>序号</td>
+                                <td>网报号</td>
+                                <td>姓名</td>
+                                <td>手机号</td>
+                                <td>报考专业</td>
+                                <td>所在院校</td>
+                                <td>毕业专业</td>
+                                <td>联系电话</td>
+                                <td>审核状态</td>
+                                <th></th>
+                            </tr>
+
+                            
+                    </table><br>
+                    <div><label for="">网报号或姓名</label> <input id="searchInput" type="text">&nbsp;&nbsp;&nbsp;<buttom id="btn_add_school" onclick="searchStudent()" class="btn btn-default" >查询</buttom><buttom id="btn_add_school" class="btn btn-default" >导出excel</buttom></div>
+                <div id="searchBox">
+                    <table border="1" id="studentSearchTable">
+
+
+                    </table>
+                </div>
+            </form>
+    </div>
+    <script>
+        function searchStudent(){
+            $("#studentSearchTable")[0].innerHTML="";
+            $.ajax({
+                url: "getStudentByName.do",//访问路径
+                type: "post",
+                data: "str=" + $("#searchInput")[0].value,
+                success:
+                    function (messages) {
+                        if(messages==null||messages==""){
+                            var tr=$("<tr><td>搜索不存在或者输入有误</td></tr>");
+                            $("#studentSearchTable").append(tr);
+                        }
+                        for(var i=0;i<messages.length;i++){
+                            var toprofession;
+                            var college;
+                            var profession;
+                            $.ajax({
+                                type: "POST",//方法类型
+                                url: "getProfessionById.do",//url
+                                async:false,
+                                data:"id="+messages[i].toprofessionid,
+                                success: function (messages) {
+                                    toprofession=messages.proName;
+                                }
+                            });
+                            $.ajax({
+                                type: "POST",//方法类型
+                                url: "getCollegeById.do",//url
+                                async:false,
+                                data:"id="+messages[i].collegeid,
+                                success: function (messages) {
+                                    college=messages.collegeName;
+                                }
+                            });
+                            $.ajax({
+                                type: "POST",//方法类型
+                                url: "getProfessionById.do",//url
+                                async:false,
+                                data:"id="+messages[i].professionid,
+                                success: function (messages) {
+                                    profession=messages.proName;
+                                }
+                            });
+                            if(messages[i]==null||messages[i]==""){
+                                var tr=$("<tr><td>搜索不存在或者输入有误</td></tr>");
+                                $("#studentSearchTable").append(tr);
+                            }else{
+                                var tr=$("<tr><td>序号</td><td>网报号</td><td>姓名</td><td>手机号</td><td>报考专业</td><td>所在院校</td><td>毕业专业</td><td>联系电话</td><td>审核状态</td></tr>");
+                                var tr2=$("<tr><td>"+messages[i].id+"</td><td>"+messages[i].wbh+"</td><td>"+messages[i].name+"</td><td>"+messages[i].phone+"</td><td>"+toprofession+"</td><td>"+college+"</td><td>"+profession+"</td><td>"+messages[i].phone+"</td><td>"+messages[i].checked+"</td></tr>");
+                                $("#studentSearchTable").append(tr);
+                                $("#studentSearchTable").append(tr2);
+                            }
+                        }
+
+                    }//查询成功处理函数
+            });
+        }
+    </script>
+</body>
+</html>

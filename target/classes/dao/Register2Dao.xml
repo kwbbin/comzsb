@@ -1,0 +1,29 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.Register2Dao">
+    <select id="getAllStudent" resultType="student">
+        select * from student
+    </select>
+
+    <select id="getAllStudent2" resultType="student">
+        select * from student where state=0
+    </select>
+
+    <delete id="deleteStudent">
+        delete from student where id=#{id}
+    </delete>
+
+    <select id="getStudentByName" resultType="student" parameterType="java.lang.String">
+        select * from student where wbh=#{str} or name=#{str}
+    </select>
+
+    <select id="getStudentByName2" resultType="student" parameterType="java.lang.String">
+        select * from student where wbh=#{str} and state=0 or name=#{str} and state=0
+    </select>
+
+    <update id="setPassword">
+        update student set `password`=123456 where id=#{id};
+    </update>
+
+</mapper>

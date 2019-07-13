@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>报名申请表</title>
+    <style>
+        table{
+            border-left: 1px solid #000;
+            border-top: 1px solid #000;
+        }
+        table td{
+            padding: 0 5px;
+            min-width: 40px;;
+            height: 40px;
+            text-align: center;
+            border-right: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+        table #image{
+          display: inline-block;
+          width:100px;
+        }
+
+        .btn{
+          display: inline-block;
+          width:70px;
+          height:30px;
+          line-height: 30px;
+          text-align: center;
+          border: 1px solid #999;
+          background: #f3f3f3;
+          border-radius: 3px;
+          margin-right: 10px;
+          cursor: pointer;
+        }
+    </style>
+  </head>
+  <body style="text-align: center;">
+    <div style="border-bottom: 1px solid #999;height:45px;line-height: 45px;text-align: left;">确认无误后点击提交按钮，提交报名信息！<span class="btn">提交</span><span class="btn">返回修改</span></div>
+    <div id="wbh" style="width:600px;text-align: right; border: 1px solid red;margin:0 auto;">
+      <div><span>网报号：</span><span>1232131</span></div>
+      <p>213213</p>
+    </div>
+    <div id="table">
+      <p>2018年湖北省高校普通专升本学生报名申请表</p>
+      <table cellspacing="0" style="font-size: 15px;margin:0 auto;">
+        <tr>
+          <td><span id="name">姓名</span></td>
+          <td><span id="name1"></span></td>
+          <td ><span id="sex">性别</span></td>
+          <td><span id="sex1"></span></td>
+          <td><span id="nation">民族</span></td>
+          <td><span id="nation1"></span></td>
+          <td rowspan="4" ><span id="image" style="display:inline-block;height:100%;width:110px;"><img style="width:100%;height:100%;" src="" alt=""></span></td>
+        </tr>
+        <tr>
+          <td><span id="birthday">出生日期</span></td>
+          <td><span id="birthday1"></span></td>
+          <td  colspan="2"><span id="policy">政治面貌</span></td>
+          <td colspan="2"><span id="policy1"></span></td>
+        </tr>
+        <tr>
+          <td><span id="identityCard">身份证号</span></td>
+          <td  colspan="5"><span id="identityCard1"></span></td>
+        </tr>
+        <tr>
+          <td><span id="identityCard">高考报名号</span></td>
+          <td colspan="5"><span id="identityCard1"></span></td>
+        </tr>
+        <tr>
+          <td><span id="college">所在院校</span></td>
+          <td  colspan="2"><span id="college1"></span></td>
+          <td colspan="2"><span id="profession">毕业专业</span></td>
+          <td colspan="2"><span id="profession1"></span></td>
+        </tr>
+        <tr>
+          <td><span id="tocollege">报考高校</span></td>
+          <td colspan="6><span id="tocollege1"></span></td>
+        </tr>
+        <tr>
+          <td><span id="college">报考专业</span></td>
+          <td  colspan="2"><span id="college1"></span></td>
+          <td colspan="2"><span id="profession">毕业专业代码</span></td>
+          <td colspan="2"><span id="profession1"></span></td>
+        </tr>
+        <tr>
+          <td><span id="college">在校期间受过何种奖励</span></td>
+          <td  colspan="4"><span ></span></td>
+          <td ><span>有何特长</span></td>
+          <td ><span></span></td>
+        </tr>
+        <tr>
+          <td><span >家庭住址</span></td>
+          <td  colspan="4"><span id=""></span></td>
+          <td ><span id="">联系电话</span></td>
+          <td><span id=""></span></td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align: left;font-size: 14px;">
+            <p>申请人须知与承诺：</p>
+            <p style="margin-bottom: 5px;">1、本人是应届普通高职/高专毕业生，能够</p>
+            <p style="margin-top: 5px;">如期毕业并获得毕业证书。</p>
+            <p>2、本人在校期间未受到任何纪律处分。</p>
+            <p>3、本人保证提供的信息真实。</p>
+            <p style="margin-bottom: 85px;">申请人（签字）：</p>
+            <p style="text-align: right;">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          </td>
+          <td colspan="2" style="text-align: left;font-size: 14px;">
+            <p style="margin-bottom:30px;">申请者所在高校学籍管理部门审核：</p>
+            <p style="margin-bottom:2px;">该生属于我校应届普通全日制在校高职</p>
+            <p style="margin-top: 2px;margin-bottom: 100px;">（专科）学生，已取得普通专业学籍。</p>
+            <p style="margin-bottom: 50px;">负责人签字（单位盖章）：</p>
+            <p style="text-align: right;">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          </td>
+          <td colspan="3" style="text-align: left;font-size: 14px;">
+            <p style="padding-bottom: 156px;">本科院校意见</p>
+            <p style="margin-bottom: 50px;">负责人签字（单位盖章）：</p>
+            <p style="text-align: right;">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          </td>
+        </tr>
+      </table>
+      <div style="text-align: left;padding-left:200px;">
+        <p style="margin-bottom: 2px;">填表说明：1、本表一式三份，申请者，申请者所在的院校和举办高校各保存留一份。2、所有信息在上交前必须</p>
+        <p style="margin-top: 2px;margin-bottom: 2px;">认真核对，准确无误，如因本人填写错误导致资格审查不能通过，由申请者本人负责。3、报名手续由申请者</p>
+        <p style="margin-top: 2px;margin-bottom: 2px;">本人办理，不得委托他人待办。填写信息不实者，一经查实，将取消其专升本资格。4、高考报名号（考</p>
+        <p style="margin-top: 2px;">生）号由申请者所在高职院校学籍管理部门提供或填写。</p>
+      </div>
+    </div>
+  </body>
+</html>

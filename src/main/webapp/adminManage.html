@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理员信息管理</title>
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery/jquery.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
+    <style>
+
+        /* 表单弹出框 */
+        .box_for_form{
+            width:400px;
+            height:350px;
+            z-index: 999;
+            position: absolute;
+            top:70px;
+            left:350px;
+            border-radius: 10px;
+            background: #9999;
+            box-shadow: 3px 3px 3px 3px #999;
+            /* background: #f3f3f3; */
+            display: none;
+        }
+
+        .box_for_form  .box_form_head {
+            height:35px;
+            background:#f3f3f3;
+            border-radius: 10px 10px 0px 0px;
+            position: relative;
+        }
+
+        .box_for_form  .box_form_content{
+            height: 315px;
+            height: 400px;
+            opacity: 1;
+        }
+        .box_for_form  .box_form_head img:hover{
+            transform:rotate(90deg);
+            -ms-transform:rotate(90deg); 	/* IE 9 */
+            -moz-transform:rotate(90deg); 	/* Firefox */
+            -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+            -o-transform:rotate(90deg); 	/* Opera */
+            transition: all 0.5s;
+        }
+
+        .box_for_form .box_form_head img{
+            position: absolute;
+            right:20px;
+            top:10px;
+            cursor: pointer;
+        }
+
+
+        .myInput{
+            height: 30px;
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .myGroup{
+            padding: 5px 0;
+            width:100%;
+        }
+        .myLabel{
+            padding:5px 1%;
+            width: 110px;
+            text-align: right;
+        }
+
+
+
+        #position p{
+            padding-top: 5px;
+            font-size: 13px;
+        }
+
+        #position p .span1{
+            font-size: 13px;
+            color: #81D3F8;
+        }
+
+        #position p .span2{
+            font-size: 13px;
+            color: #AAAAAA;
+        }
+
+        #position p .span3{
+            font-size: 13px;
+            color: #D9001B;
+        }
+
+        body{
+    padding-left: 10px;
+}
+
+table{
+    margin-left: 20px;
+    margin-top: 20px;
+    min-width: 400px;
+}
+table tr td,table tr th {
+    padding:5px 10px;
+}
+
+table tr:nth-of-type(odd){
+    background:#f3f3f3;
+}
+
+
+    </style>
+    <script>
+        window.onload=function () {
+            getAllAdmin();
+        }
+        function getAllAdmin() {
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getAllAdmin.do",//url
+                async:false,
+                success: function (messages) {
+                    for (var i=0;i<messages.length;i++){
+                        if(messages[i].id==1){
+                            var tr=$("<tr><td>"+messages[i].id+"</td><td>"+messages[i].tname+"</td><td>"+messages[i].tphone+"</td><td>"+messages[i].email+"</td><td></td></tr>");
+                            $("#tableAdmin").append(tr);
+                        }else{
+                            var tr=$("<tr><td>"+messages[i].id+"</td><td><a myname='"+messages[i].tname+"' href='#' onclick='addFunction(this)' myid='"+messages[i].id+"'>"+messages[i].tname+"</a></td><td>"+messages[i].tphone+"</td><td>"+messages[i].email+"</td><td><a herf='#' id='"+messages[i].id+"'  onclick='deleteAdmin(this)'>删除</a></td></tr>");
+                            $("#tableAdmin").append(tr);
+                        }
+
+                    }
+                }
+            });
+        }
+
+        function addFunction(obj) {
+            $("#mubu").fadeIn("slow");
+            $("#box_admin_function_add").fadeIn("slow");
+
+            var name=obj.getAttribute("myname");
+            var id=obj.getAttribute("myid");
+            $("#check_box_id").text(id);
+            $("#check_box_name").text(name);
+            $("#function_id")[0].value=id;
+
+
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getFunctionByAdminId.do",//url
+                async:false,
+                data:"id="+id,
+                success: function (messages) {
+                    for (var i=0;i<messages.length;i++){
+                        if(messages[i].fid==1){
+                            $("#functionId1")[0].checked=true;
+                        }else if(messages[i].fid==2){
+                            $("#functionId2")[0].checked=true;
+                        }else if(messages[i].fid==3){
+                            $("#functionId3")[0].checked=true;
+                        }else if(messages[i].fid==4){
+                            $("#functionId4")[0].checked=true;
+                        }else if(messages[i].fid==5){
+                            $("#functionId5")[0].checked=true;
+                        }else if(messages[i].fid==6){
+                            $("#functionId6")[0].checked=true;
+                        }else if(messages[i].fid==7){
+                            $("#functionId7")[0].checked=true;
+                        }else if(messages[i].fid==8){
+                            $("#functionId8")[0].checked=true;
+                        }else if(messages[i].fid==9){
+                            $("#functionId9")[0].checked=true;
+                        }
+
+                    }
+                }
+            });
+
+        }
+
+        function colse_add_function() {
+            $("#mubu").fadeOut("slow");
+            $("#box_admin_function_add").fadeOut("slow");
+
+        }
+
+        function deleteAdmin(obj) {
+            $.ajax({
+                url: "deleteAdmin.do",//访问路径
+                type: "post",
+                data: "id=" + obj.getAttribute("id"),
+                success:
+                    function (messages) {
+                        if (messages == "true") {
+                            $(obj).parent().parent().remove();
+                        }else{
+                            alert("无法删除，该数据已被占用");
+                        }
+                    }//查询成功处理函数
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="mubu" style="z-index: 5;background: #fff;opacity: 0.7;position: absolute;width: 100%;height:100%;top:0;left: 0;display: none;"></div>
+    <div id="position"><p> <span class="span1">桌面  </span> <span class="span2">>> </span><span class="span3"> 管理员信息管理  </span></p></div>
+    <div>
+            <form action="" id="formAdmin" >
+                    <table border="1" id="tableAdmin">
+                            <tr>
+                                <td>序号</td>
+                                <td>姓名</td>
+                                <td>联系方式</td>
+                                <td>邮箱</td>
+                                <th></th>
+                            </tr>
+                            
+                    </table><br>
+                    <div>&nbsp;<buttom id="btn_add_school" onclick="addAdmin()" class="btn btn-default" >添加管理员</buttom></div>
+                    
+            </form>
+    </div>
+
+    <script>
+        function addAdmin(){
+            $("#mubu").fadeIn("slow");
+            $("#box_admin_add").fadeIn("slow");
+
+        }
+
+        function close_admin_add() {
+            $("#mubu").fadeOut("slow");
+            $("#box_admin_add").fadeOut("slow");
+        }
+
+        function admin_function_add_submit() {
+            $.ajax({
+                url: "updateAdminFunction.do",//访问路径
+                type: "post",
+                data: $('#functionForm').serialize(),
+                success:
+                    function (messages) {
+                       if(messages=="true"){
+                           colse_add_function();
+                           alert("修改成功");
+                       }
+                    }//查询成功处理函数
+            });
+        }
+
+        function admin_add_submit() {
+            if($("#tname").val()!=""&&$("#tpassword").val()!=""&&$("#tphone").val()!=""&&$("#temail").val()!=""){
+                $.ajax({
+                    url: "addAdmin.do",//访问路径
+                    type: "post",
+                    async:false,
+                    data: "tname=" + $("#tname").val()+"&tpassword="+$("#tpassword").val()+"&tphone="+$("#tphone").val()+"&temail="+$("#temail").val(),
+                    success:
+                        function (messages) {
+                            if (messages==null||messages=="") {
+                                alert("出现异常，无法添加");
+                            }else{
+                                var tr=$("<tr><td>"+messages.id+"</td><td><a myname='"+messages.tname+"' href='#' onclick='addFunction(this)' myid='"+messages.id+"'>"+messages.tname+"</a></td></td><td>"+messages.tphone+"</td><td>"+messages.email+"</td><td><a herf='#' id='"+messages.id+"'  onclick='deleteAdmin(this)'>删除</a></td></tr>");
+                                $("#tableAdmin").append(tr);
+                                close_admin_add();
+                                alert("添加成功");
+                            }
+                        }//查询成功处理函数
+                });
+            }else{
+                alert("请完整填写信息");
+            }
+
+        }
+    </script>
+
+
+    <!--学院修改-->
+    <div class="box_for_form" id="box_admin_add">
+        <div class="box_form_head"><img onclick="close_admin_add()" id="close_admin_add" src="img/close.png" alt=""></div>
+        <div  class="box_form_content">
+            <form class="box_form4_content_form" action=""><br><br>
+                <div class="myGroup">
+                    <label class="myLabel">姓名: </label><input type="text" class="myInput" name="tname" id="tname" >
+                </div>
+                <div class="myGroup">
+                    <label class="myLabel">密码: </label><input type="text" class="myInput" name="tpassword" id="tpassword">
+                </div>
+                <div class="myGroup">
+                    <label class="myLabel">电话: </label><input type="text" class="myInput" name="tphone" id="tphone">
+                </div>
+                <div class="myGroup">
+                    <label class="myLabel">邮箱: </label><input type="text" class="myInput" name="temail" id="temail" >
+                </div>
+                <span style="position: absolute;bottom:20px;left:100px;" onclick="admin_add_submit()" class="btn btn-default">添加</span>
+            </form>
+
+        </div>
+    </div>
+
+<!--权限修改-->
+<div class="box_for_form" id="box_admin_function_add">
+    <div class="box_form_head"><img onclick="colse_add_function()" id="close_admin_function_add" src="img/close.png" alt=""><label class="info">&nbsp;&nbsp;&nbsp;&nbsp;ID:</label><span id="check_box_id" style="font-weight: bold;padding-left: 5px;line-height: 30px;"></span><label class="info">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;姓名:</label><span id="check_box_name" style="font-weight: bold;padding-left: 5px;"></span></div>
+    <div  class="box_form_content">
+        <form class="box_form4_content_form" id="functionForm" action=""><br><br>
+            <input name="id" style="display: none;" id="function_id">
+            <input name="functionId" type="checkbox" id="functionId1" value="1"><label for="functionId1">桌面</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="functionId" type="checkbox" id="functionId2" value="2"><label for="functionId2">基础信息管理</label>&nbsp;&nbsp;&nbsp;<br>
+            <input name="functionId" type="checkbox" id="functionId3" value="3"><label for="functionId3">注册管理</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="functionId" type="checkbox" id="functionId4" value="4"><label for="functionId4">报名信息管理</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            <input name="functionId" type="checkbox" id="functionId5" value="5"><label for="functionId5">审核管理</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="functionId" type="checkbox" id="functionId6" value="6"><label for="functionId6">考场安排管理</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            <input name="functionId" type="checkbox" id="functionId7" value="7"><label for="functionId7">成绩管理</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="functionId" type="checkbox" id="functionId8" value="8"><label for="functionId8">录取管理</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+            <input name="functionId" type="checkbox" id="functionId9" value="9"><label for="functionId9">管理员信息管理</label>&nbsp;&nbsp;&nbsp;
+            <span style="position: absolute;bottom:20px;left:100px;" onclick="admin_function_add_submit()" class="btn btn-default">添加</span>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>审核管理</title>
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery/jquery.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/layDate-v5.0.9/laydate/laydate.js"></script>
+    <script src="js/check.js"></script>
+    <link rel="stylesheet" href="css/check.css">
+    <style>
+
+       /* 表单弹出框 */
+       .box_for_form{
+           width:400px;
+           height:350px;
+           z-index: 999;
+           position: absolute;
+           top:70px;
+           left:350px;
+           border-radius: 10px;
+           background: #9999;
+           box-shadow: 3px 3px 3px 3px #999;
+           /* background: #f3f3f3; */
+           display: none;
+       }
+       .box_for_form  .box_form_head {
+           height:35px;
+           background:#f3f3f3;
+           border-radius: 10px 10px 0px 0px;
+           position: relative;
+           line-height: 35px;
+           padding-left: 10px;
+       }
+
+       .box_for_form  .box_form_content{
+           height: 315px;
+           height: 400px;
+           opacity: 1;
+           padding-left: 150px;
+       }
+       .box_for_form  .box_form_head img:hover{
+           transform:rotate(90deg);
+           -ms-transform:rotate(90deg); 	/* IE 9 */
+           -moz-transform:rotate(90deg); 	/* Firefox */
+           -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+           -o-transform:rotate(90deg); 	/* Opera */
+           transition: all 0.5s;
+       }
+
+       .box_for_form .box_form_head img{
+           position: absolute;
+           right:20px;
+           top:10px;
+           cursor: pointer;
+       }
+
+    </style>
+    <script>
+        window.onload=function () {
+            form1();
+            form2();
+            form3();
+            form4();
+        }
+        function changeBox(obj) {
+            $("#mubu").fadeIn("slow");
+            $("#checkBox").fadeIn("slow");
+
+            $("#check_box_id")[0].innerHTML=obj.id;
+            $("#check_box_name")[0].innerHTML=obj.name;
+
+        }
+
+        function checkBox_close() {
+            $("#mubu").fadeOut("slow");
+            $("#checkBox").fadeOut("slow");
+        }
+
+        function btn_check_submit(){
+            var checkBegin;
+            var checkEnd;
+            var now=new Date().getTime();
+            $.ajax({
+                url :  "getBaseinformation.do",//访问路径
+                type : "post",
+                async:false,
+                success :
+                    function(messages){
+                        if(messages!=""){
+                            checkBegin=messages.checkBegin;
+                            checkEnd=messages.checkEnd;
+                        }
+                    }//查询成功处理函数
+            });
+
+            if(now>checkBegin&&now<checkEnd){
+
+                var checked;
+                if($("#check0").get(0).checked==true){
+                    checked=0;
+                }else if($("#check1").get(0).checked==true){
+                    checked=1;
+                }else if($("#check2").get(0).checked==true){
+                    checked=2;
+                }else if($("#check3").get(0).checked==true){
+                    checked=3;
+                }
+                $.ajax({
+                    type: "POST",//方法类型
+                    url: "updateStudentCheck.do",//url
+                    data:"id="+$("#check_box_id")[0].innerText+"&checked="+checked,
+                    async:false,
+                    success: function (messages) {
+                        if(messages=="true"){
+                            form1();
+                            form2();
+                            form3();
+                            form4();
+                            alert("保存成功");
+                            window.location.reload();
+                        }else{
+                            alert("异常");
+                        }
+
+                    }
+                });
+
+            }else{
+                alert("当前没到审核时间");
+            }
+
+
+        }
+
+        function form1() {
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getStudentByCheck0.do",//url
+                async:false,
+                success: function (messages) {
+
+                    for(var i=0;i<messages.length;i++){
+                        var toprofession;
+                        var college;
+                        var profession;
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].toprofessionid,
+                            success: function (messages) {
+                                toprofession=messages.proName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getCollegeById.do",//url
+                            async:false,
+                            data:"id="+messages[i].collegeid,
+                            success: function (messages) {
+                                college=messages.collegeName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].professionid,
+                            success: function (messages) {
+                                profession=messages.proName;
+                            }
+                        });
+                        var tr=$("<tr><td>"+messages[i].id+"</td><td>"+messages[i].wbh+"</td><td>"+messages[i].name+"</td><td>"+messages[i].phone+"</td><td>"+toprofession+"</td><td>"+college+"</td><td>"+profession+"</td><td>"+messages[i].phone+"</td><td>"+messages[i].checked+"</td><td><a name='"+messages[i].name+"' id='"+messages[i].id+"' href='#' onclick='changeBox(this)'>改变审核状态</a></td></tr>");
+                        $("#table_form0").append(tr);
+                        // messages[i]
+                    }
+                }
+            });
+        }
+        function form2() {
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getStudentByCheck1.do",//url
+                async:false,
+                success: function (messages) {
+
+                    for(var i=0;i<messages.length;i++){
+                        var toprofession;
+                        var college;
+                        var profession;
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].toprofessionid,
+                            success: function (messages) {
+                                toprofession=messages.proName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getCollegeById.do",//url
+                            async:false,
+                            data:"id="+messages[i].collegeid,
+                            success: function (messages) {
+                                college=messages.collegeName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].professionid,
+                            success: function (messages) {
+                                profession=messages.proName;
+                            }
+                        });
+                        var tr=$("<tr><td>"+messages[i].id+"</td><td>"+messages[i].wbh+"</td><td>"+messages[i].name+"</td><td>"+messages[i].phone+"</td><td>"+toprofession+"</td><td>"+college+"</td><td>"+profession+"</td><td>"+messages[i].phone+"</td><td>"+messages[i].checked+"</td><td><a name='"+messages[i].name+"' id='"+messages[i].id+"' href='#' onclick='changeBox(this)'>改变审核状态</a></td></tr>");
+                        $("#table_form1").append(tr);
+                    }
+                }
+            });
+
+        }
+        function form3() {
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getStudentByCheck2.do",//url
+                async:false,
+                success: function (messages) {
+
+                    for(var i=0;i<messages.length;i++){
+                        var toprofession;
+                        var college;
+                        var profession;
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].toprofessionid,
+                            success: function (messages) {
+                                toprofession=messages.proName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getCollegeById.do",//url
+                            async:false,
+                            data:"id="+messages[i].collegeid,
+                            success: function (messages) {
+                                college=messages.collegeName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].professionid,
+                            success: function (messages) {
+                                profession=messages.proName;
+                            }
+                        });
+                        var tr=$("<tr><td>"+messages[i].id+"</td><td>"+messages[i].wbh+"</td><td>"+messages[i].name+"</td><td>"+messages[i].phone+"</td><td>"+toprofession+"</td><td>"+college+"</td><td>"+profession+"</td><td>"+messages[i].phone+"</td><td>"+messages[i].checked+"</td><td><a name='"+messages[i].name+"' id='"+messages[i].id+"' href='#' onclick='changeBox(this)'>改变审核状态</a></td></tr>");
+                        $("#table_form2").append(tr);
+                        // messages[i]
+                    }
+                }
+            });
+        }
+        function form4() {
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getStudentByCheck3.do",//url
+                async:false,
+                success: function (messages) {
+
+                    for(var i=0;i<messages.length;i++){
+                        var toprofession;
+                        var college;
+                        var profession;
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].toprofessionid,
+                            success: function (messages) {
+                                toprofession=messages.proName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getCollegeById.do",//url
+                            async:false,
+                            data:"id="+messages[i].collegeid,
+                            success: function (messages) {
+                                college=messages.collegeName;
+                            }
+                        });
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "getProfessionById.do",//url
+                            async:false,
+                            data:"id="+messages[i].professionid,
+                            success: function (messages) {
+                                profession=messages.proName;
+                            }
+                        });
+                        var tr=$("<tr><td>"+messages[i].id+"</td><td>"+messages[i].wbh+"</td><td>"+messages[i].name+"</td><td>"+messages[i].phone+"</td><td>"+toprofession+"</td><td>"+college+"</td><td>"+profession+"</td><td>"+messages[i].phone+"</td><td>"+messages[i].checked+"</td><td><a name='"+messages[i].name+"' id='"+messages[i].id+"' href='#' onclick='changeBox(this)'>改变审核状态</a></td></tr>");
+                        $("#table_form3").append(tr);
+                        // messages[i]
+                    }
+                }
+            });
+        }
+
+        function searchStudent(obj){
+            var str=obj.getAttribute("sid");
+
+            $("#studentSearchTable")[0].innerHTML="";
+            $.ajax({
+                url: "getStudentByName.do",//访问路径
+                type: "post",
+                data: "str=" + $("#"+str)[0].value,
+                success:
+                    function (messages) {
+                        if(messages==null||messages==""){
+                            var tr=$("<tr><td>搜索不存在或者输入有误</td></tr>");
+                            $("#studentSearchTable").append(tr);
+                        }
+                        for(var i=0;i<messages.length;i++){
+                            var toprofession;
+                            var college;
+                            var profession;
+                            $.ajax({
+                                type: "POST",//方法类型
+                                url: "getProfessionById.do",//url
+                                async:false,
+                                data:"id="+messages[i].toprofessionid,
+                                success: function (messages) {
+                                    toprofession=messages.proName;
+                                }
+                            });
+                            $.ajax({
+                                type: "POST",//方法类型
+                                url: "getCollegeById.do",//url
+                                async:false,
+                                data:"id="+messages[i].collegeid,
+                                success: function (messages) {
+                                    college=messages.collegeName;
+                                }
+                            });
+                            $.ajax({
+                                type: "POST",//方法类型
+                                url: "getProfessionById.do",//url
+                                async:false,
+                                data:"id="+messages[i].professionid,
+                                success: function (messages) {
+                                    profession=messages.proName;
+                                }
+                            });
+                            if(messages[i]==null||messages[i]==""){
+                                var tr=$("<tr><td>搜索不存在或者输入有误</td></tr>");
+                                $("#studentSearchTable").append(tr);
+                            }else{
+                                var tr=$("<tr><td>序号</td><td>网报号</td><td>姓名</td><td>手机号</td><td>报考专业</td><td>所在院校</td><td>毕业专业</td><td>联系电话</td><td>审核状态</td></tr>");
+                                var tr2=$("<tr><td>"+messages[i].id+"</td><td>"+messages[i].wbh+"</td><td>"+messages[i].name+"</td><td>"+messages[i].phone+"</td><td>"+toprofession+"</td><td>"+college+"</td><td>"+profession+"</td><td>"+messages[i].phone+"</td><td>"+messages[i].checked+"</td></tr>");
+                                $("#studentSearchTable").append(tr);
+                                $("#studentSearchTable").append(tr2);
+                            }
+                        }
+
+                    }//查询成功处理函数
+            });
+        }
+    </script>
+    
+</head>
+<body>
+<div id="mubu" style="z-index: 0;background: #fff;opacity: 0.9;position: absolute;width: 100%;height:100%;top:-10px;left: 0;display: none;"></div>
+        <ul id="nav" class="nav nav-tabs" id="ul">
+                <li class="active"><a href="#">待审核名单</a></li>
+                <li><a href="#">审核通过名单</a></li>
+                <li><a href="#">审核预通过名单</a></li>
+                <li><a href="#">审核不通过名单</a></li>
+        </ul>
+        <div id="main">
+                <form action="" id="form0" style="display: block;">
+                    <table border="1" id="table_form0">
+                                    <tr>
+                                      <th>序号</th>
+                                      <th>网报号</th>
+                                      <th>姓名</th>
+                                        <th>手机号</th>
+                                      <th>报考专业</th>
+                                      <th>所在院校</th>
+                                      <th>毕业专业</th>
+                                      <th>联系电话</th>
+                                      <th>审核状态</th>
+                                      <th></th>
+                                    </tr>
+                            </table><br>
+
+                    &nbsp;&nbsp;&nbsp;网报号、姓名或专业：</label><input  type="text" id="checkInput1" >&nbsp;&nbsp;&nbsp;<span class="btn btn-default" sid="checkInput1" onclick="searchStudent(this)" >查询</span>
+
+                </form>
+
+                <form action="" id="form1" style="display: none;">
+                    <table border="1" id="table_form1">
+                        <tr>
+                          <th>序号</th>
+                          <th>网报号</th>
+                          <th>姓名</th>
+                            <th>手机号</th>
+                          <th>报考专业</th>
+                          <th>所在院校</th>
+                          <th>毕业专业</th>
+                          <th>联系电话</th>
+                          <th>审核状态</th>
+                            <th></th>
+                        </tr>
+
+                </table><br>
+                &nbsp;&nbsp;&nbsp;网报号、姓名或专业：</label><input type="text" id="checkInpput2">&nbsp;&nbsp;&nbsp;<span sid="checkInpput2" onclick="searchStudent(this)" class="btn btn-default">查询</span>&nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-default" value="导出excel">
+                         
+                    </form>
+                    <form action="" id="form2" style="display: none;">
+                        <table border="1" id="table_form2">
+                            <tr>
+                              <th>序号</th>
+                              <th>网报号</th>
+                              <th>姓名</th>
+                                <th>手机号</th>
+                              <th>报考专业</th>
+                              <th>所在院校</th>
+                              <th>毕业专业</th>
+                              <th>联系电话</th>
+                              <th>审核状态</th>
+                                <th></th>
+                            </tr>
+
+
+                    </table><br>
+                    &nbsp;&nbsp;&nbsp;网报号、姓名或专业：</label><input type="text" id="checkInpput3">&nbsp;&nbsp;&nbsp;<span sid="checkInpput3" onclick="searchStudent(this)" class="btn btn-default">查询</span>
+                    </form>
+                    <form action="" id="form3" style="display: none;">
+                        <table border="1"  id="table_form3">
+                            <tr>
+                              <th>序号</th>
+                              <th>网报号</th>
+                              <th>姓名</th>
+                                <th>手机号</th>
+                              <th>报考专业</th>
+                              <th>所在院校</th>
+                              <th>毕业专业</th>
+                              <th>联系电话</th>
+                              <th>审核状态</th>
+                                <th></th>
+                            </tr>
+
+
+                    </table><br>
+                    &nbsp;&nbsp;&nbsp;网报号、姓名或专业：</label><input type="text" id="checkInpput4">&nbsp;&nbsp;&nbsp;<span sid="checkInpput4" onclick="searchStudent(this)" class="btn btn-default">查询</span>
+                    </form>
+            <div id="searchBox">
+                <table border="1" id="studentSearchTable">
+
+                </table>
+            </div>
+                </div>
+        </div>
+
+
+<!--科目修改-->
+<div class="box_for_form" id="checkBox">
+    <div class="box_form_head"><img id="checkBox_close" onclick="checkBox_close()" src="img/close.png" alt=""><label class="info">ID:</label><span id="check_box_id" style="font-weight: bold;padding-left: 5px;">1</span><label class="info">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;姓名:</label><span id="check_box_name" style="font-weight: bold;padding-left: 5px;">得到</span></div>
+    <div  class="box_form_content">
+        <form class="box_form4_content_form" id="updateSubjectForm" action=""><br>
+            <div><input type="radio" value="0" name="check" checked id="check0"><label for="check0"> 待审核</label></div>
+            <div><input type="radio" value="1" name="check" id="check1"><label for="check1"> 审核预通过</label></div>
+            <div><input type="radio" value="2" name="check" id="check2"><label for="check2"> 审核通过</label></div>
+            <div><input type="radio" value="3" name="check" id="check3"><label for="check3"> 审核不通过</label></div><br>
+            <div><span id="btn_check_submit" onclick="btn_check_submit()" class="btn btn-default">确定</span></div>
+        </form>
+
+    </div>
+</div>
+
+
+</body>
+<script>
+        init();
+        
+        //日历控件
+        // 开放时间设置
+        laydate.render({
+            elem: '#registerBegin',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#registerEnd',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+
+        laydate.render({
+            elem: '#joinBegin',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#joinEnd',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+
+        laydate.render({
+            elem: '#checkBegin',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#checkEnd' ,
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+
+        laydate.render({
+            elem: '#dowloadBegin' ,
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#dowloadEnd',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+
+        laydate.render({
+            elem: '#gradeBegin' ,
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#gradeEnd' ,
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#projoinBegin' ,
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#projoinEnd',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+
+
+        // 考试时间设置
+        laydate.render({
+            elem: '#examone',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#examtwo',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#examthree',
+            trigger: 'click' ,
+            type: 'datetime'
+        });
+</script>
+</html>

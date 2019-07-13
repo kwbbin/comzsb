@@ -1,0 +1,75 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.StuSecurityDao">
+    <insert id="stuRegister" parameterType="student">
+        insert into student(wbh,phone,password,name,identityCard,email,questionOne,ansQuestionOne,questionTwo,ansQuestionTwo,state) VALUEs(#{wbh},#{phone},#{password},#{name},#{identityCard},#{email},#{questionOne},#{ansQuestionOne},#{questionTwo},#{ansQuestionTwo},0)
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getAllQuestion" resultType="question">
+ 		select * from user_question
+ 	</select>
+
+    <select id="getMaxWbh" resultType="java.lang.Integer">
+ 		SELECT max(wbh) FROM Student
+ 	</select>
+
+
+    <select id="isExistByPhone" resultType="java.lang.Integer">
+ 		select count(*) FROM student where phone=#{phone}
+ 	</select>
+
+    <select id="adminIsExistByPhone" resultType="java.lang.Integer">
+ 		select count(*) FROM admininformation where tphone=#{tphone}
+ 	</select>
+
+    <select id="isExistByPhoneAndPass" resultType="java.lang.Integer" parameterType="student">
+ 		SELECT count(*) FROM student where phone=#{phone} and `password`=#{password}
+ 	</select>
+
+    <select id="adminIsExistByPhoneAndPass" resultType="java.lang.Integer" parameterType="admin">
+ 		SELECT count(*) FROM admininformation where tphone=#{tphone} and `tpassword`=#{tpassword}
+ 	</select>
+
+
+
+    <select id="getStudentByPhoneAndPass" resultType="student" parameterType="student">
+ 		SELECT * from student where phone=#{phone} and `password`=#{password}
+ 	</select>
+
+    <select id="getAdminByPhoneAndPass" resultType="admin" parameterType="admin">
+ 		SELECT * from admininformation where tphone=#{tphone} and `tpassword`=#{tpassword}
+ 	</select>
+
+
+	<select id="getStudentName" parameterType="int" resultType="string">
+        select name from student where id=#{id}
+    </select>
+
+	<select id="getStudentImage" parameterType="int" resultType="string">
+        select image from student where id=#{id}
+    </select>
+
+    <select id="getQuestionByUserPhone" resultType="question">
+        select * FROM user_question where id in (select questionOne from student where phone=#{phone}) or id in (select questiontwo from student where phone=#{phone})
+    </select>
+
+    <select id="equilQuestionOne" resultType="string"  parameterType="map">
+        select #{ansQuestion}=ansQuestionOne one from student where phone=#{phone}
+    </select>
+
+    <select id="equilQuestionTwo" resultType="string"  parameterType="map">
+        select #{ansQuestion}=ansQuestionTwo two from student where phone=#{phone}
+    </select>
+
+    <select id="getIdCardNum" resultType="string" parameterType="string">
+        SELECT RIGHT((SELECT identityCard from student where phone=#{phone}),6)
+    </select>
+
+    <update id="reSetPassword" parameterType="map">
+        update student set `password`=#{identityCard} where phone=#{phone}
+    </update>
+</mapper>

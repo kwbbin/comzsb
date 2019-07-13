@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/jquery/jquery.js"></script>
+    <style>
+        li{
+            list-style-type: none;
+        }
+        body{
+            text-align: center;
+            background: #fff;
+        }
+        body div{
+            position: relative;
+        }
+        body>div h2{
+            text-align: center;
+            color: #666;
+        }
+        body>div .list{
+            width:32%;
+            float: left;
+        }
+        body>div .list h3{color: #999;}
+        body>div .list ul>li{
+            border:1px solid #666;
+            padding: 5px 0;
+        }
+        body>div .list ul>li:nth-child(odd){
+            background: #D7D7D7;
+        }
+        body>div .list ul>li:nth-child(even){
+            background: #F2F2F2;
+        }
+    </style>
+    <script>
+        window.onload=function () {
+            $.ajax({
+                type: "POST",//方法类型
+                url: "getDeskData.do",//url
+                async:false,
+                success: function (messages) {
+                    $("#subjectNum").text(messages.subjectNum);
+                    $("#joinSubjectNum").text(messages.joinSubjectNum);
+                    $("#registerNum").text(messages.registerNum);
+                    $("#hadjoinNum").text(messages.hadjoinNum);
+                    $("#check0").text(messages.check0);
+                    $("#check4").text(messages.check4);
+                    $("#hadSuccess").text(messages.hadSuccess);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div><h2>“专升本”信息管理系统</h2></div>
+    <div>
+        <div class="list">
+            <h3>基础数据</h3>
+            <ul>
+                <li>考试科目个数：<span id="subjectNum" style="color:RED">19</span>个</li>
+                <li>招生专业个数：<span id="joinSubjectNum" style="color:RED">19</span>个</li>
+            </ul>
+        </div>
+        <div class="list">
+            <h3>学生数据</h3>
+            <ul>
+                <li>注册用户人数：<span id="registerNum" style="color:RED">19</span>个</li>
+                <li>完成报名人数：<span id="hadjoinNum" style="color:RED">19</span>个</li>
+                <li>待审核总人数：<span id="check0" style="color:RED">19</span>个</li>
+                <li>审核通过人数：<span id="check4" style="color:RED">19</span>个</li>
+                <li>全校录取人数：<span id="hadSuccess" style="color:RED">19</span>个</li>
+            </ul>
+        </div>
+        <div class="list">
+            <h3>考场数据</h3>
+            <ul>
+                    <li>公共考场个数：19个</li>
+                    <li>专用考场个数：5个</li>
+                </ul>
+        </div>
+    </div>
+</body>
+</html>

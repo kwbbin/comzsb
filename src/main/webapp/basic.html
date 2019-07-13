@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>基础管理</title>
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery/jquery.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/layDate-v5.0.9/laydate/laydate.js"></script>
+    <script src="js/basic.js"></script>
+    <link rel="stylesheet" href="css/basic.css">
+
+    <style>
+        .mySelect{
+            width:200px;
+            display: inline-block;
+        }
+
+        .mySelect option{
+            height:25px;
+        }
+
+        .myInput{
+            height: 30px;
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .myGroup{
+            padding: 5px 0;
+            width:100%;
+        }
+        .myLabel{
+            padding:5px 1%;
+            width: 110px;
+            text-align: right;
+        }
+
+    </style>
+    <script>
+        window.onload=function () {
+            getFormOneAjax();
+            getFormTwoAjax();
+            getFormThreeAjax();
+            getFormForeAjax();
+            getFormFiveAjax();
+            getFormSixAjax();
+            getFormsevenAjax();
+            init();
+            checkForm();
+        }
+    </script>
+</head>
+<body>
+<ul id="nav" class="nav nav-tabs" id="ul">
+    <li class="active"><a href="#">学校信息设置</a></li>
+    <li><a href="#">报考年份设置</a></li>
+    <li><a href="#">开放时间设置</a></li>
+    <li><a href="#">考试时间设置</a></li>
+    <li><a href="#">考试科目设置</a></li>
+    <li><a href="#">报考专业设置</a></li>
+    <li><a href="#">院校信息设置</a></li>
+</ul>
+<div id="main">
+    <form action="formOne.do" id="form0" style="display: block;">
+        <div style="width:600px;">
+            <div class="form-group">
+                <label for="myCollege" class="col-sm-2 control-label">学校名称</label>
+                <div class="col-sm-10" style="width:200px;">
+                    <select name="myCollege" id="myCollege"  class="form-control mySelect">
+                        <option style="color:#999;">- 请选择 -</option>
+                    </select>
+                </div>
+            </div><br><br>
+            &nbsp;&nbsp;&nbsp;<input type="submit" id="formOneSubmit" class="btn btn-default">
+        </div>
+
+    </form>
+
+    <form action="formTwo.do" id="form1" style="display: none;" AUTOCOMPLETE="off">
+        <div style="width:600px;">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">报考年份</label>
+                <div class="col-sm-10">
+                    <input type="text" name="year" class="form-control" id="applyYear" placeholder="报考年份设置">
+                </div>
+            </div><br><br>
+            &nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-default">
+        </div>
+
+    </form>
+    <form action="formThree.do" id="form2" style="display: none;" autocomplete="off">
+        <table border="1" style="min-width: 400px;">
+            <tr>
+                <th>类别</th>
+                <th>开始开发时间</th>
+                <th>结束开始时间</th>
+            </tr>
+
+            <tr>
+                <td>注册</td>
+                <td><input type="text" name="registerBegin" id="registerBegin"></td>
+                <td><input type="text" name="registerEnd" id="registerEnd"></td>
+            </tr>
+
+            <tr>
+                <td>报名</td>
+                <td><input type="text" name="joinBegin" id="joinBegin"></td>
+                <td><input type="text" name="joinEnd" id="joinEnd"></td>
+            </tr>
+
+            <tr>
+                <td>审核查询</td>
+                <td><input type="text" name="checkBegin" id="checkBegin"></td>
+                <td><input type="text" name="checkEnd" id="checkEnd"></td>
+            </tr>
+
+            <tr>
+                <td>下载准考证</td>
+                <td><input type="text" name="dowloadBegin" id="dowloadBegin"></td>
+                <td><input type="text" name="dowloadEnd" id="dowloadEnd"></td>
+            </tr>
+
+            <tr>
+                <td>成绩查询</td>
+                <td><input type="text" name="gradeBegin" id="gradeBegin"></td>
+                <td><input type="text" name="gradeEnd" id="gradeEnd"></td>
+            </tr>
+
+            <tr>
+                <td>预录取查询</td>
+                <td><input type="text" name="projoinBegin" id="projoinBegin"></td>
+                <td><input type="text" name="projoinEnd" id="projoinEnd"></td>
+            </tr>
+        </table><br>
+        &nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-default" value="保存修改">
+    </form>
+    <form action="updateSubjectTime.do" id="form3" style="display: none;" AUTOCOMPLETE="off">
+        <table border="1" style="min-width: 400px;">
+            <tr>
+                <td>考试科目一</td>
+                <td><input type="text" name="oneTime" id="examone"></td>
+            </tr>
+
+            <tr>
+                <td>考试科目二</td>
+                <td><input type="text" name="twoTime" id="examtwo"></td>
+            </tr>
+
+            <tr>
+                <td>考试科目三</td>
+                <td><input type="text" name="threeTime" id="examthree"></td>
+            </tr>
+
+            <tr>
+                <td>考试科目四</td>
+                <td><input type="text" name="foreTime" id="examfore"></td>
+            </tr>
+        </table><br>
+        &nbsp;&nbsp;&nbsp;<input type="submit" class="btn btn-default" value="保存考试时间">
+    </form>
+    <form action="" id="form4" style="display: none;">
+        <table border="1" id="formForeTable" style="min-width: 400px;">
+            <tr>
+                <th>科目编号</th>
+                <th>科目名称</th>
+                <th></th>
+                <th></th>
+            </tr>
+
+        </table><br>
+        &nbsp;&nbsp;&nbsp;<buttom id="btn_add_project" class="btn btn-default" >添加一条考试科目信息</buttom>
+
+
+    </form>
+    <form action="" id="form5" style="display: none;">
+        <table border="1" id="formFiveTable" style="min-width: 400px;">
+            <tr>
+                <th>专业代码</th>
+                <th>专业名称</th>
+                <th>考试（专业）排序</th>
+                <th>学制</th>
+                <th>考试科目一</th>
+                <th>考试科目二</th>
+                <th>考试科目三</th>
+                <th>考试科目四</th>
+                <th></th>
+            </tr>
+
+        </table><br>
+        &nbsp;&nbsp;&nbsp;<buttom id="btn_add_profession" class="btn btn-default" >添加一条专业信息</buttom>
+    </form>
+    <form action="" id="form6" style="display: none;">
+        <table border="1" id="CollgeManage" style="min-width: 400px;">
+            <tr>
+                <th colspan="4">高校名称</th>
+            </tr>
+
+
+        </table><br>
+        &nbsp;&nbsp;&nbsp;<buttom id="btn_add_school" class="btn btn-default" >添加高校</buttom>
+    </form>
+</div>
+
+
+<!--科目添加-->
+<div class="box_for_form" id="box_suject_add">
+    <div class="box_form_head"><img id="colse_suject_add" src="img/close.png" alt=""></div>
+    <div  class="box_form_content">
+        <form class="box_form4_content_form" id="addSubjectForm" action="">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">科目编号</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="subjectNum" name="subjectNum" placeholder="科目编号">
+                </div>
+            </div><br>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">科目名称</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="subjectName" name="subjectName" placeholder="科目名称">
+                </div>
+            </div><br>
+            <span style="position: absolute;bottom:20px;" id="addSubject_submit" onclick="addSubject()"  class="btn btn-default">添加</span>
+        </form>
+
+    </div>
+</div>
+
+<div id="mubu" style="z-index: 5;background: #fff;opacity: 0.7;position: absolute;width: 100%;height:100%;top:0;left: 0;display: none;"></div>
+<!--专业添加-->
+<div class="box_for_form" id="box_profession_add" style="opacity: 1;">
+
+    <div class="box_form_head"><img id="colse_profession_add" src="img/close.png" alt=""></div>
+    <div  class="box_form_content" >
+        <form class="box_form4_content_form" id="form_add_pfofession" action="">
+
+                <div class="myGroup">
+                    <label class="myLabel">专业代码: </label><input type="text" class="myInput" name="professionCode" id="professionCode" placeholder="专业代码">
+                </div>
+                <div class="myGroup">
+                    <label class="myLabel">专业名称: </label><input type="text" class="myInput" name="professionName" id="professionName" placeholder="专业名称">
+                </div>
+
+                <div class="myGroup">
+                    <label class="myLabel">学制: </label><input type="text" class="myInput" name="xz" id="xz" placeholder="学制">
+                </div>
+                <div class="myGroup">
+                    <label class="myLabel">考试科目一: </label>
+                    <select name="subjectOne" id="subjectOne" class="form-control mySelect">
+                        <option style="color:#999;">请选择</option>
+                    </select>
+                </div>
+            <div class="myGroup">
+                <label class="myLabel">考试科目二: </label>
+                <select name="subjectTwo" id="subjectTwo" class="form-control mySelect">
+                    <option style="color:#999;">请选择</option>
+                </select>
+            </div>
+            <div class="myGroup">
+                <label class="myLabel">考试科目三: </label>
+                <select name="subjectThree" id="subjectThree" class="form-control mySelect">
+                    <option style="color:#999;">请选择</option>
+                </select>
+            </div>
+            <div class="myGroup">
+                <label class="myLabel">考试科目四: </label>
+                <select name="subjectfour" id="subjectfour" class="form-control mySelect">
+                    <option style="color:#999;">请选择</option>
+                </select>
+            </div>
+            <span style="position: absolute;bottom:20px;" id="profession_profession_add" onclick="addProfession();" class="btn btn-default">添加</span>
+        </form>
+
+    </div>
+</div>
+
+<!--学院添加-->
+<div class="box_for_form" id="box_college_add">
+    <div class="box_form_head"><img id="colse_college_add" src="img/close.png" alt=""></div>
+    <div  class="box_form_content">
+        <form class="box_form4_content_form" action="">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">学校名称</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="collegeName" name="collegeName" placeholder="学校名称">
+                </div>
+            </div><br>
+            <span style="position: absolute;bottom:20px;" onclick="addCollege()" class="btn btn-default">添加</span>
+        </form>
+
+    </div>
+</div>
+
+
+
+<!--科目修改-->
+<div class="box_for_form" id="box_suject_update">
+    <div class="box_form_head"><img id="colse_suject_update" src="img/close.png" alt=""></div>
+    <div  class="box_form_content">
+        <form class="box_form4_content_form" id="updateSubjectForm" action="">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">科目Id</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" disabled id="subjectId_update" name="subjectId">
+                </div>
+            </div><br>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">科目编号</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="subjectNum_update" name="subjectNum" placeholder="科目编号">
+                </div>
+            </div><br>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">科目名称</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="subjectName_update" name="subjectName" placeholder="科目名称">
+                </div>
+            </div><br>
+            <span style="position: absolute;bottom:20px;" id="updateSubject_submit" onclick="updateSubject_submit()"  class="btn btn-default">修改</span>
+        </form>
+
+    </div>
+</div>
+
+<!--专业修改-->
+<div class="box_for_form" id="box_profession_update" style="opacity: 1;">
+
+    <div class="box_form_head"><img id="colse_profession_update" src="img/close.png" alt=""></div>
+    <div  class="box_form_content" >
+        <form class="box_form4_content_form" id="form_update_pfofession" action="">
+            <div class="myGroup">
+                <label class="myLabel">专业ID: </label><input type="text" class="myInput" name="professionId" id="professionId_update" placeholder="专业代码">
+            </div>
+            <div class="myGroup">
+                <label class="myLabel">专业代码: </label><input type="text" class="myInput" name="professionCode" id="professionCode_update" placeholder="专业代码">
+            </div>
+            <div class="myGroup">
+                <label class="myLabel">专业名称: </label><input type="text" class="myInput" name="professionName" id="professionName_update" placeholder="专业名称">
+            </div>
+
+            <div class="myGroup">
+                <label class="myLabel">学制: </label><input type="text" class="myInput" name="xz" id="xz_update" placeholder="学制">
+            </div>
+            <div class="myGroup">
+                <label class="myLabel">考试科目一: </label>
+                <select name="subjectOne" id="subjectOne_update" class="form-control mySelect">
+                    <option style="color:#999;">请选择</option>
+                </select>
+            </div>
+            <div class="myGroup">
+                <label class="myLabel">考试科目二: </label>
+                <select name="subjectTwo" id="subjectTwo_update" class="form-control mySelect">
+                    <option style="color:#999;">请选择</option>
+                </select>
+            </div>
+            <div class="myGroup">
+                <label class="myLabel">考试科目三: </label>
+                <select name="subjectThree" id="subjectThree_update" class="form-control mySelect">
+                    <option style="color:#999;">请选择</option>
+                </select>
+            </div>
+            <div class="myGroup">
+                <label class="myLabel">考试科目四: </label>
+                <select name="subjectfour" id="subjectfour_update" class="form-control mySelect">
+                    <option style="color:#999;">请选择</option>
+                </select>
+            </div><br>
+            <span style="position: absolute;bottom:20px;" id="profession_profession_update" onclick="updateProfession_submit();" class="btn btn-default">修改</span>
+        </form>
+
+    </div>
+</div>
+
+
+<!--学院修改-->
+<div class="box_for_form" id="box_college_update">
+    <div class="box_form_head"><img id="colse_college_update" src="img/close.png" alt=""></div>
+    <div  class="box_form_content">
+        <form class="box_form4_content_form" action="">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">学校Id</label>
+                <div class="col-sm-10">
+                    <input type="text" disabled class="form-control" id="collegeId_update" name="id">
+                </div>
+            </div><br>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">学校名称</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="collegeName_update" name="collegeName" placeholder="学校名称">
+                </div>
+            </div><br>
+            <span style="position: absolute;bottom:20px;" onclick="updateCollege_submit()" class="btn btn-default">修改</span>
+        </form>
+
+    </div>
+</div>
+
+</body>
+<script>
+
+
+
+
+
+    //日历控件
+    // 开放时间设置
+    laydate.render({
+        elem: '#registerBegin',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#registerEnd',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+
+    laydate.render({
+        elem: '#joinBegin',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#joinEnd',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+
+    laydate.render({
+        elem: '#checkBegin',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#checkEnd' ,
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+
+    laydate.render({
+        elem: '#dowloadBegin' ,
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#dowloadEnd',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+
+    laydate.render({
+        elem: '#gradeBegin' ,
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#gradeEnd' ,
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#projoinBegin' ,
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#projoinEnd',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+
+
+    // 考试时间设置
+    laydate.render({
+        elem: '#examone',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#examtwo',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#examthree',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#examfore',
+        trigger: 'click' ,
+        type: 'datetime'
+    });
+    laydate.render({
+        elem: '#applyYear',
+        trigger: 'click' ,
+        type: 'year'
+    });
+
+
+</script>
+</html>
